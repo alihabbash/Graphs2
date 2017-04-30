@@ -31,11 +31,12 @@ namespace JsonParser
                 {
                     String json = sw.ReadToEnd();
                     graphs = JsonConvert.DeserializeObject<List<Graph>>(json);
+                    
                     //using (Newtonsoft.Json.JsonReader reader = new JsonTextReader(new StreamReader(filepath)))
                     //{
                     //    while (reader.Read())
                     //    {
-
+                    //       Type a = reader.ValueType;
                     //    }
                     //}
                 }

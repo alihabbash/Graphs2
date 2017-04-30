@@ -14,19 +14,15 @@ namespace JsonParser
     {
         public String Name { get; set; }
         public bool visited { get; set; }
-        public Point Position { get; set; }
-        public List<Point> Pos_Next { get; set; }
         public Node()
         {
             Name = "";
             visited = false;
-            Pos_Next = new List<Point>();
         }
         public Node(String name)
         {
             Name = name;
             visited = false;
-            Pos_Next = new List<Point>();
         }
         public int getdegree(List<Line> lines)
         {

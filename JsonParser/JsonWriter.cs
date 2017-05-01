@@ -12,18 +12,18 @@ using System.Web.Script.Serialization;
 
 namespace JsonParser
 {
-    public class JsonWriter
+    public class JsonWriter : ICloneable
     {
         public List<Graph> graphs;
         public List<Node> nodes;
         public List<Line> lines;
-        String filepath;
-        public JsonWriter(String filepath)
+        String graph_name;
+        public JsonWriter()
         {
-            this.filepath = filepath;
             nodes = new List<Node>();
             lines = new List<Line>();
             graphs = new List<Graph>();
+            graph_name = "";
         }
         private int getcountof(String Text, char ch)
         {
@@ -82,7 +82,7 @@ namespace JsonParser
                 return null;
             }
         }
-        public void createNew(String Textbox, String RichTextbox)
+        public void createNew(String Textbox, String RichTextbox, String graph_name)
         {
             try
             {
@@ -122,11 +122,11 @@ namespace JsonParser
                             lines[i].End = nodes[j];
 
                 }
-                graphs.Add(new Graph("G1",nodes, lines));
-                graphs.Add(new Graph("G2", nodes, lines));
-               // writeontxt();
-                WriteOnJSON();
-                MessageBox.Show("Done", "Created", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.graph_name = graph_name;
+                graphs.Add(this.Clone() as Graph);
+                nodes.Clear();
+                lines.Clear();
+                MessageBox.Show("Added", "Added successfully", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             }
             catch (Exception e)
@@ -134,12 +134,13 @@ namespace JsonParser
                 MessageBox.Show(e.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        private void WriteOnJSON()
+        public void WriteOnJSON(String filepath)
         {
             JavaScriptSerializer sr = new JavaScriptSerializer();
             String outputjson = sr.Serialize(graphs);
             File.WriteAllText(filepath, outputjson);
         }
+
         //private void WriteOnJSON()
         //{
         //    try
@@ -198,5 +199,16 @@ namespace JsonParser
         //        MessageBox.Show(e.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         //    }
         //}
+
+        public object Clone()
+        {
+            List<Node> nodes = new List<Node>();
+            List<Line> lines = new List<Line>();
+            nodes.AddRange(this.nodes);
+            lines.AddRange(this.lines);
+            Graph graph = new Graph(graph_name, nodes, lines);
+            return graph;
+
+        }
     }
 }

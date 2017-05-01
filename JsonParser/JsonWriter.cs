@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Windows;
 using System.IO;
 using Newtonsoft.Json;
+using System.Web.Script.Serialization;
 
 namespace JsonParser
 {
@@ -135,61 +136,67 @@ namespace JsonParser
         }
         private void WriteOnJSON()
         {
-            try
-            {
-                using (Newtonsoft.Json.JsonWriter write = new JsonTextWriter(new StreamWriter(filepath)))
-                {
-                    write.Formatting = Formatting.Indented;
-                    write.WriteStartArray();
-                    foreach (Graph graph in graphs)
-                    {
-                        write.WriteStartObject();
-                        write.WritePropertyName("Name");
-                        write.WriteValue(graph.name);
-                        write.WritePropertyName("Nodes");
-                        write.WriteStartArray();
-                        if(graph.nodes!=null)
-                        {
-                            foreach (Node node in nodes)
-                            {
-                                write.WriteStartObject();
-                                write.WritePropertyName("Name");
-                                write.WriteValue(node.Name);
-                                write.WritePropertyName("Visited");
-                                write.WriteValue(node.visited);
-                                write.WriteEndObject();
-                            }
-                        }
-                        write.WriteEndArray();
-                        write.WritePropertyName("Lines");
-                        write.WriteStartArray();
-                        if (graph.lines != null)
-                        {
-                            foreach (Line line in lines)
-                            {
-                                write.WriteStartObject();
-                                write.WritePropertyName("Name");
-                                write.WriteValue(line.Name);
-                                write.WritePropertyName("Visited");
-                                write.WriteValue(line.visited);
-                                write.WritePropertyName("Begin");
-                                write.WriteValue(line.Begin.Name);
-                                write.WritePropertyName("End");
-                                write.WriteValue(line.End.Name);
-                                write.WritePropertyName("weight");
-                                write.WriteValue(line.Weight);
-                                write.WriteEndObject();
-                            }
-                        }
-                        write.WriteEndObject();
-                    }
-                    write.WriteEndArray();
-                }
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            JavaScriptSerializer sr = new JavaScriptSerializer();
+            String outputjson = sr.Serialize(graphs);
+            File.WriteAllText(filepath, outputjson);
         }
+        //private void WriteOnJSON()
+        //{
+        //    try
+        //    {
+        //        using (Newtonsoft.Json.JsonWriter write = new JsonTextWriter(new StreamWriter(filepath)))
+        //        {
+        //            write.Formatting = Formatting.Indented;
+        //            write.WriteStartArray();
+        //            foreach (Graph graph in graphs)
+        //            {
+        //                write.WriteStartObject();
+        //                write.WritePropertyName("Name");
+        //                write.WriteValue(graph.name);
+        //                write.WritePropertyName("Nodes");
+        //                write.WriteStartArray();
+        //                if(graph.nodes!=null)
+        //                {
+        //                    foreach (Node node in nodes)
+        //                    {
+        //                        write.WriteStartObject();
+        //                        write.WritePropertyName("Name");
+        //                        write.WriteValue(node.Name);
+        //                        write.WritePropertyName("Visited");
+        //                        write.WriteValue(node.visited);
+        //                        write.WriteEndObject();
+        //                    }
+        //                }
+        //                write.WriteEndArray();
+        //                write.WritePropertyName("Lines");
+        //                write.WriteStartArray();
+        //                if (graph.lines != null)
+        //                {
+        //                    foreach (Line line in lines)
+        //                    {
+        //                        write.WriteStartObject();
+        //                        write.WritePropertyName("Name");
+        //                        write.WriteValue(line.Name);
+        //                        write.WritePropertyName("Visited");
+        //                        write.WriteValue(line.visited);
+        //                        write.WritePropertyName("Begin");
+        //                        write.WriteValue(line.Begin.Name);
+        //                        write.WritePropertyName("End");
+        //                        write.WriteValue(line.End.Name);
+        //                        write.WritePropertyName("weight");
+        //                        write.WriteValue(line.Weight);
+        //                        write.WriteEndObject();
+        //                    }
+        //                }
+        //                write.WriteEndObject();
+        //            }
+        //            write.WriteEndArray();
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        MessageBox.Show(e.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //    }
+        //}
     }
 }

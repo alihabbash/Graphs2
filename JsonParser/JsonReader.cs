@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Windows;
 using System.IO;
 using Newtonsoft.Json;
+using System.Web.Script.Serialization;
 namespace JsonParser
 {
     public class JsonReader
@@ -27,19 +28,9 @@ namespace JsonParser
         {
             try
             {
-                using (StreamReader sw = new StreamReader(filepath))
-                {
-                    String json = sw.ReadToEnd();
-                    graphs = JsonConvert.DeserializeObject<List<Graph>>(json);
-                    
-                    //using (Newtonsoft.Json.JsonReader reader = new JsonTextReader(new StreamReader(filepath)))
-                    //{
-                    //    while (reader.Read())
-                    //    {
-                    //       Type a = reader.ValueType;
-                    //    }
-                    //}
-                }
+                String json = File.ReadAllText(filepath);
+                JavaScriptSerializer sz = new JavaScriptSerializer();
+                List<Graph> Gs = sz.Deserialize<List<Graph>>(json);
             }
             catch (Exception e)
             {

@@ -31,9 +31,9 @@ namespace JsonParser
                 int degree = 0;
                 for (int i = 0; i < lines.Count; i++)
                 {
-                    if (lines[i].Begin == this)
+                    if (lines[i].Begin.ToString() == this.ToString())
                         degree++;
-                    if (lines[i].End == this)
+                    if (lines[i].End.ToString() == this.ToString())
                         degree++;
                 }
                 return degree;
@@ -44,7 +44,7 @@ namespace JsonParser
                 return -1;
             }
         }
-        public List<Node> getchilds(List<Line> lines, bool iseulerain)
+        public List<Node> getchilds(List<Line> lines, bool islinevisited)
         {
             try
             {
@@ -54,7 +54,7 @@ namespace JsonParser
 
                     if (lines[i].Begin == this)
                         if (!nodelist.Contains(lines[i].End))
-                            if (!iseulerain)
+                            if (!islinevisited)
                             {
                                 if (!lines[i].End.visited)
                                     nodelist.Add(lines[i].End);
@@ -64,7 +64,7 @@ namespace JsonParser
                                     nodelist.Add(lines[i].End);
                     if (lines[i].End == this)
                         if (!nodelist.Contains(lines[i].Begin))
-                            if (!iseulerain)
+                            if (!islinevisited)
                             {
                                 if (!lines[i].Begin.visited)
                                     nodelist.Add(lines[i].Begin);
@@ -83,6 +83,7 @@ namespace JsonParser
                 return null;
             }
         }
+       
         public override string ToString()
         {
             return this.Name;

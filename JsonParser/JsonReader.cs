@@ -13,10 +13,10 @@ namespace JsonParser
 {
     public class JsonReader
     {
-        List<Graph> graphs;
+        public List<Graph> graphs;
         String filepath;
-        List<Line> lines;
-        List<Node> nodes;
+        public List<Line> lines;
+        public List<Node> nodes;
         public JsonReader(String filepath)
         {
             this.filepath = filepath;
@@ -24,17 +24,18 @@ namespace JsonParser
             nodes = new List<Node>();
             graphs = new List<Graph>();
         }
-        public void ReadFromJson()
+        public Graph ReadFromJson()
         {
             try
             {
                 String json = File.ReadAllText(filepath);
                 JavaScriptSerializer sz = new JavaScriptSerializer();
-                List<Graph> Gs = sz.Deserialize<List<Graph>>(json);
+                return sz.Deserialize<Graph>(json);
             }
             catch (Exception e)
             {
                 MessageBox.Show(e.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return null;
             }
         }
     }

@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Graph.cs" />
+    <Compile Include="GraphOperation.cs" />
     <Compile Include="JsonReader.cs" />
     <Compile Include="JsonWriter.cs" />
     <Compile Include="Line.cs" />

@@ -14,16 +14,13 @@ namespace JsonParser
 {
     public class JsonWriter : ICloneable
     {
-        public List<Graph> graphs;
+        public Graph graph;
         public List<Node> nodes;
         public List<Line> lines;
-        String graph_name;
         public JsonWriter()
         {
             nodes = new List<Node>();
             lines = new List<Line>();
-            graphs = new List<Graph>();
-            graph_name = "";
         }
         private int getcountof(String Text, char ch)
         {
@@ -82,7 +79,7 @@ namespace JsonParser
                 return null;
             }
         }
-        public void createNew(String Textbox, String RichTextbox, String graph_name)
+        public void createNew(String Textbox, String RichTextbox)
         {
             try
             {
@@ -120,13 +117,9 @@ namespace JsonParser
                     for (int j = 0; j < nodes.Count; j++)
                         if (nodes[j].Name.Equals(ends[i]))
                             lines[i].End = nodes[j];
-
+                    graph = new Graph("G1", nodes, lines);
                 }
-                this.graph_name = graph_name;
-                graphs.Add(this.Clone() as Graph);
-                nodes.Clear();
-                lines.Clear();
-                MessageBox.Show("Added", "Added successfully", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Added successfully", "Added", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             }
             catch (Exception e)
@@ -136,9 +129,17 @@ namespace JsonParser
         }
         public void WriteOnJSON(String filepath)
         {
-            JavaScriptSerializer sr = new JavaScriptSerializer();
-            String outputjson = sr.Serialize(graphs);
-            File.WriteAllText(filepath, outputjson);
+            try
+            {
+                JavaScriptSerializer sr = new JavaScriptSerializer();
+                String outputjson = sr.Serialize(graph);
+                File.WriteAllText(filepath, outputjson);
+                MessageBox.Show("Saved Successfully in " + filepath, "Saved", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message,"Error",MessageBoxButtons.OK,MessageBoxIcon.Information);
+            }
         }
 
         //private void WriteOnJSON()
@@ -206,7 +207,7 @@ namespace JsonParser
             List<Line> lines = new List<Line>();
             nodes.AddRange(this.nodes);
             lines.AddRange(this.lines);
-            Graph graph = new Graph(graph_name, nodes, lines);
+            Graph graph = new Graph("G1", nodes, lines);
             return graph;
 
         }
